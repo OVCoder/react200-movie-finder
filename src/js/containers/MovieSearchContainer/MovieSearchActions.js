@@ -33,7 +33,15 @@ export function searchMovieByTitle(searchMovieTitle){
           //.then(responses =>console.log(responses[0].data.Plot,"RESPONSES")) //returns an array of responses, each response has a movie object in .data  //responses[0].data.Plot - path to plot
             .then(responses => {
               return response.data.Search.map((singleMovie, index) =>{
-                return{...singleMovie, plot: responses[index].data.Plot}
+                return{...singleMovie, 
+                          Plot: responses[index].data.Plot,
+                          Released: responses[index].data.Released,
+                          Length: responses[index].data.Runtime,
+                          Genre: responses[index].data.Genre,
+                          Awards: responses[index].data.Awards,
+                          Metascore: responses[index].data.Metascore,
+                          imdbRating: responses[index].data.imdbRating,
+                        }
               })
             })
         })
@@ -41,15 +49,30 @@ export function searchMovieByTitle(searchMovieTitle){
 }
 
 export function provideMovieInfo(movieID){
+ console.log (movieID, "THIS IS movieID from Actions");
   return{
     type: 'MOVIE_INFO',
-    payload:''
+    payload:{imdbID: movieID}
   }
 }
 
-// return{
-//   type: 'SEARCH_MOVIE',
-//   payload:
-//     axios.get('http://www.omdbapi.com/?apikey='+APIkey+'&s='+movieForURI)
-//       .then(response => response.data.Search)
-// }
+export function searchMovieByImdbID(movieID){
+  console.log (movieID, "THIS IS movieID from searchMovieByImdbID Action");
+  return{
+    type: 'SEARCH_MOVIE_BY_ID',
+    payload:
+      axios.get(`http://www.omdbapi.com/?apikey=8730e0e&i=${movieID}`)
+        .then(response => {
+          return{
+            Plot: response.data.Plot,
+            Released: response.data.Released,
+            Length: response.data.Runtime,
+            Genre: response.data.Genre,
+            Awards: response.data.Awards,
+            Metascore: response.data.Metascore,
+            imdbRating: response.data.imdbRating,
+            Poster: response.data.Poster
+          }
+        })
+  }
+}

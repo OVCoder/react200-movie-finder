@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 // Import of action creators
 import{
@@ -27,15 +28,15 @@ class MovieSearchContainer extends React.Component {
   }
   handleMovieInfo(event){
     const {dispatch} = this.props;
-    const {key} = event.target;
-    console.log(this, "THIS IS this");
-    // dispatch(provideMovieInfo(key)); //key here is imdbID
+    const {id} = event.target;
+    console.log(id, "THIS IS id");
+    dispatch(provideMovieInfo(id)); //key here is imdbID
   }
 
   render(){
     //Values below were provided by connect()
     const {searchMovieTitle, movieList} = this.props;
-    console.log(this.props,"THIS.PROPS from render method")
+    console.log(this.props,"THIS.PROPS from render method");
     return(
       <div className="container">
         <div className="jumbotron bg-secondary d-flex justify-content-center">
@@ -74,15 +75,17 @@ class MovieSearchContainer extends React.Component {
               <div className="row">{movieObject.Title}</div>
               <p>{movieObject.Year}</p>
               <hr/>
-              <div className="row">{movieObject.plot}</div>
-              <button 
-                type="button" 
-                className="btn btn-success float-right bg-secondary border border-secondary"
-                key={movieObject.imdbID}
-                onClick={this.handleMovieInfo}
-                >
-                More Information
-              </button>
+              <div className="row">{movieObject.Plot}</div>
+                <Link to={`/movie/${movieObject.imdbID}`}>
+                  <button 
+                    type="button" 
+                    className="btn btn-success float-right bg-secondary border border-secondary"
+                    id={movieObject.imdbID}
+                    onClick={this.handleMovieInfo}
+                    >
+                    More Information
+                  </button>
+                </Link>
             </div>
           </div>
           ))}
